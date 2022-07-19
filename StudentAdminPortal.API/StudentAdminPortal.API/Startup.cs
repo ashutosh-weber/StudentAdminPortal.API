@@ -29,6 +29,17 @@ namespace StudentAdminPortal.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors((options) =>
+            {
+                options.AddPolicy("angularApplication", (builder) =>
+                 {
+                     builder.WithOrigins("http://localhost:4200")  // it is local environ if we go for other environ so we mention here we just us elocal so we mention local enivron
+                     .AllowAnyHeader() // add header we allow any heder 
+                     .WithMethods("GET", "POST", "PUT", "DELETE") // i allow only 4 method 
+                     .WithMethods("*"); //  wild card  * it means all header exposed 
+                });
+            });
+
 
             services.AddControllers();
             services.AddDbContext<StudentAdminContext>(options =>
@@ -57,6 +68,8 @@ namespace StudentAdminPortal.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("angularApplication");
 
             app.UseAuthorization();
 
